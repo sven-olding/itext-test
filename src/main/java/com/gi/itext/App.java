@@ -9,10 +9,8 @@ import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.AreaBreakType;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
@@ -70,7 +68,10 @@ public class App {
                     for (int cellNum = 0; cellNum < numCols; cellNum++) {
                         Cell cell = row.getCell(cellNum, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                         com.itextpdf.layout.element.Cell pdfCell = new com.itextpdf.layout.element.Cell();
-                        pdfCell.add(new Paragraph(cell.getStringCellValue()));
+                        XSSFCellStyle cellStyle = (XSSFCellStyle) cell.getCellStyle();
+                        pdfCell.add(
+                                new Paragraph(cell.getStringCellValue())
+                                        .setFontSize(cellStyle.getFont().getFontHeightInPoints()));
                         pdfCell.setHeight(heightInPoints);
                         pdfCell.setBorder(new SolidBorder(0.5f));
                         table.addCell(pdfCell);
